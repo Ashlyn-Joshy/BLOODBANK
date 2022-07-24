@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="image/logo-bg white.png">
+
+    
+    <script> //java script code to priview  image
+        $(document).on("change", ".uploadProfileInput", function () {
+  var triggerInput = this;
+  var currentImg = $(this).closest(".pic-holder").find(".pic").attr("src");
+  var holder = $(this).closest(".pic-holder");
+  var wrapper = $(this).closest(".profile-pic-wrapper");
+  $(wrapper).find('[role="alert"]').remove();
+  triggerInput.blur();
+  var files = !!this.files ? this.files : [];
+  if (!files.length || !window.FileReader) {
+    return;
+  }
+  if (/^image/.test(files[0].type)) {
+    // only image file
+    var reader = new FileReader(); // instance of the FileReader
+    reader.readAsDataURL(files[0]); // read the local file
+
+    reader.onloadend = function () {
+      $(holder).addClass("uploadInProgress");
+      $(holder).find(".pic").attr("src", this.result);
+      $(holder).append(
+        '<div class="upload-loader"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>'
+      );
+
+      // Dummy timeout; call API or AJAX below
+      setTimeout(() => {
+        $(holder).removeClass("uploadInProgress");
+        $(holder).find(".upload-loader").remove();
+        // If upload successful
+        if (Math.random() < 0.9) {
+          $(wrapper).append(
+            '<div class="snackbar show" role="alert"><i class="fa fa-check-circle text-success"></i> Profile image updated successfully</div>'
+          );
+
+          // Clear input after upload
+          $(triggerInput).val("");
+
+          setTimeout(() => {
+            $(wrapper).find('[role="alert"]').remove();
+          }, 3000);
+        } else {
+          $(holder).find(".pic").attr("src", currentImg);
+          $(wrapper).append(
+            '<div class="snackbar show" role="alert"><i class="fa fa-times-circle text-danger"></i> There is an error while uploading! Please try again later.</div>'
+          );
+
+          // Clear input after upload
+          $(triggerInput).val("");
+          setTimeout(() => {
+            $(wrapper).find('[role="alert"]').remove();
+          }, 3000);
+        }
+      }, 1500);
+    };
+  } else {
+    $(wrapper).append(
+      '<div class="alert alert-danger d-inline-block p-2 small" role="alert">Please choose the valid image.</div>'
+    );
+    setTimeout(() => {
+      $(wrapper).find('role="alert"').remove();
+    }, 3000);
+  }
+});
+
+    </script> 
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jblood Bank</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <style>
+    .profile-pic-wrapper {
+        height: 50vh;
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .pic-holder {
+        text-align: center;
+        position: relative;
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      
+      .pic-holder .pic {
+        height: 100%;
+        width: 100%;
+        -o-object-fit: cover;
+        object-fit: cover;
+        -o-object-position: center;
+        object-position: center;
+      }
+      
+      .pic-holder .upload-file-block,
+      .pic-holder .upload-loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(90, 92, 105, 0.7);
+        color: #f8f9fc;
+        font-size: 12px;
+        font-weight: 600;
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      
+      .pic-holder .upload-file-block {
+        cursor: pointer;
+      }
+      
+      .pic-holder:hover .upload-file-block,
+      .uploadProfileInput:focus ~ .upload-file-block {
+        opacity: 1;
+      }
+      
+      .pic-holder.uploadInProgress .upload-file-block {
+        display: none;
+      }
+      
+      .pic-holder.uploadInProgress .upload-loader {
+        opacity: 1;
+      }
+      
+      /* Snackbar css */
+      .snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 14px;
+        transform: translateX(-50%);
+      }
+      
+      .snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+      
+      @-webkit-keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+      
+      @keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+      
+      @-webkit-keyframes fadeout {
+        from {
+          bottom: 30px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+      
+      @keyframes fadeout {
+        from {
+          bottom: 30px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+      </style>
+</head>
+<body>
+    <!-- header -->
+    <header>
+        <div class="row">
+            <div class="col col lg-12 md-6 sm-3">
+                
+                <nav class="navbar navbar-expand-lg">
+                    <div class="container-fluid">
+                      <a class="navbar-brand" href="#">
+                            <img src="image/logo-bg white.png" alt="logo" width="45" height="45" style="margin-left:45px;" class="d-inline-block align-text-top" >
+                            <p style="color:#EA0000; margin-top:-25px; margin-left: 85px;" ><strong>BLOOD BANK</strong></p>
+                      </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link active" style="color:#EA0000;" aria-current="page" href="index.html">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button class="btn btn-outline-danger me-md-2" type="button">Log In</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                  </nav>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- body -->
+
+    <section class="p-5">
+        <div class="container">
+            <div class="row">
+                <div class="col col lg-12 md-6 sm-3 text-center">
+                    <form>
+                        <img class="mb-4" src="image/logo-bg white.png" alt="logo width="72" height="72">
+                        <h1 class="h3 mb-3 fw-normal" style="color: #EA0000;">Please Sign up</h1>
+
+                        <!-- profile picture --> 
+                        <div class="profile-pic-wrapper">
+                            <div class="pic-holder">
+                              <!-- uploaded pic shown here -->
+                              <img id="profilePic" class="pic" src="https://source.unsplash.com/random/150x150?person">
+                          
+                              <Input class="uploadProfileInput" type="file" name="profile_pic" id="newProfilePhoto" accept="image/*" style="opacity: 0;" />
+                              <label for="newProfilePhoto" class="upload-file-block">
+                                <div class="text-center">
+                                  <div class="mb-2">
+                                    <i class="fa fa-camera fa-2x"></i>
+                                  </div>
+                                  <div class="text-uppercase">
+                                    Update <br /> Profile Photo
+                                  </div>
+                                </div>
+                              </label>
+                            </div>
+                          
+                            </hr>
+                            <p class="text-info text-center small">Note: Selected image will not be uploaded anywhere. </br> It's just for demonstration purposes.</p>
+                          </div>
+
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="your name">
+                            <label for="floatingInput">Name</label>
+                          </div>
+                          <br>
+
+                        <div class="form-floating">
+                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                          <label for="floatingInput">Email address(jecc mail)</label>
+                        </div>
+                        <br>
+
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <label for="floatingInput">Email address(personal)</label>
+                          </div>
+                          <br>
+
+                        
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="Address">
+                            <label for="floatingInput">Address</label>
+                          </div>
+                          <br>
+
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="floatingInput" placeholder="Height">
+                            <label for="floatingInput">Height</label>
+                          </div>
+                          <br>
+
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="floatingInput" placeholder="Weight">
+                            <label for="floatingInput">Weight</label>
+                          </div>
+                          <br>
+
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="floatingInput" placeholder="Phone Number">
+                            <label for="floatingInput">Phone Number</label>
+                          </div>
+                          <br>
+
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="floatingInput" placeholder="Pincode">
+                            <label for="floatingInput">Pincode</label>
+                          </div>
+                          <br>
+
+                        
+                                <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+
+                                    <h6 class="mb-0 me-4">Blood Group: </h6>
+                  
+                                    <div class="form-check form-check-inline mb-0 me-4">
+                                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="A+"
+                                        value="A+" />
+                                      <label class="form-check-label" for="A+">A+</label>
+                                    </div>
+                                    <div class="form-check form-check-inline mb-0 me-4">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="O+"
+                                          value="O+" />
+                                        <label class="form-check-label" for="O+">O+</label>
+                                      </div>
+                                      <div class="form-check form-check-inline mb-0 me-4">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="B+"
+                                          value="B+" />
+                                        <label class="form-check-label" for="B+">B+</label>
+                                      </div>
+                                      <div class="form-check form-check-inline mb-0 me-4">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="AB+"
+                                          value="AB+" />
+                                        <label class="form-check-label" for="AB+">AB+</label>
+                                      </div>
+                                      <div class="form-check form-check-inline mb-0 me-4">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="A-"
+                                          value="A-" />
+                                        <label class="form-check-label" for="A-">A-</label>
+                                      </div>                   
+                                      <div class="form-check form-check-inline mb-0 me-4">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="O-"
+                                          value="O-" />
+                                        <label class="form-check-label" for="O-">O-</label>
+                                      </div>   
+                                      <div class="form-check form-check-inline mb-0 me-4">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="B-"
+                                          value="B-" />
+                                        <label class="form-check-label" for="B-">B-</label>
+                                      </div>   
+                                      <div class="form-check form-check-inline mb-0 me-4">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="AB-"
+                                          value="AB-" />
+                                        <label class="form-check-label" for="AB-">AB-</label>
+                                      </div> 
+                                  </div> 
+                                  
+
+                                <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+
+                                    <h6 class="mb-0 me-4">Gender: </h6>
+                  
+                                    <div class="form-check form-check-inline mb-0 me-4">
+                                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="femaleGender"
+                                        value="option1" />
+                                      <label class="form-check-label" for="femaleGender">Female</label>
+                                    </div>
+                  
+                                    <div class="form-check form-check-inline mb-0 me-4">
+                                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="maleGender"
+                                        value="option2" />
+                                      <label class="form-check-label" for="maleGender">Male</label>
+                                    </div>
+                  
+                                    <div class="form-check form-check-inline mb-0">
+                                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="otherGender"
+                                        value="option3" />
+                                      <label class="form-check-label" for="otherGender">Other</label>
+                                    </div>
+                  
+                                  </div>     
+                    
+                        <div class="checkbox mb-3">
+                          <label>
+                            <input type="checkbox" value="remember-me"> All the information that has been entered is valid within my knowledege
+                          </label>
+                        </div>
+                        <button class="w-100 btn btn-lg btn-danger" type="submit">Register</button>
+
+
+
+
+                           <!-- footer -->
+                        <p class="mt-5 mb-3 text-muted">&copy;Jbloodbank 2022</p>
+                    </form>
+                </div>
+
+
+
+
+
+             
+            </div>
+        </div>
+
+    </section>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
